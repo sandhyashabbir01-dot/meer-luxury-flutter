@@ -1,0 +1,41 @@
+name: meer_luxury_flutter
+
+description: "A new Flutter project."
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none'
+
+# The following defines the version and build number for your application.
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  http: ^1.6.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/banners/
+    - assets/images/banners/fashion/
+    - assets/images/banners/jewellery/
+    - assets/images/banners/bags/
+    - assets/images/banners/bags/Automobiles & Motorcycle/
+    - assets/images/banners/bags/Sports & outdoor/
+    - assets/images/banners/bags/Kids & toy/
+    - assets/images/banners/bags/Computer & Accessories/
+    - assets/images/banners/India/
+    - assets/images/banners/uk/
