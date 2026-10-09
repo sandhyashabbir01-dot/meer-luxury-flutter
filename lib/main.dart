@@ -1,4 +1,4 @@
-﻿import 'fake_api_service.dart';
+import 'fake_api_service.dart';
 import 'dart:async';
 import 'dart:convert';
 
@@ -30,7 +30,6 @@ const int kShippingFee = 10; // is amount se neeche shipping charge
 // Phone aur laptop ek hi WiFi par hon.
 // ---------------------------------------------------------------------------
 const String kBaseUrl = 'http://localhost:5000';
-
 
 // ============================================================================
 // COLORS (aapki website wali theme)
@@ -116,106 +115,56 @@ class Product {
   }
 }
 
-List<Product> fashionProducts = [
-  Product('Fashion Collection 01', 'assets/images/banners/fashion/F W1.jpeg', 120, 'fashion'),
-  Product('Fashion Collection 02', 'assets/images/banners/fashion/F W2.jpeg', 135, 'fashion'),
-  Product('Fashion Collection 03', 'assets/images/banners/fashion/F W3.jpeg', 145, 'fashion'),
-  Product('Fashion Collection 04', 'assets/images/banners/fashion/F W4.jpeg', 155, 'fashion'),
-  Product('Fashion Collection 05', 'assets/images/banners/fashion/F W5.jpeg', 165, 'fashion'),
-  Product('Fashion Collection 06', 'assets/images/banners/fashion/F W6.jpeg', 175, 'fashion'),
-  Product('Fashion Collection 07', 'assets/images/banners/fashion/F W7.jpeg', 185, 'fashion'),
-  Product('Fashion Collection 08', 'assets/images/banners/fashion/F W8.jpeg', 195, 'fashion'),
-  Product('Fashion Collection 09', 'assets/images/banners/fashion/F W9.jpeg', 205, 'fashion'),
-  Product('Fashion Collection 10', 'assets/images/banners/fashion/F W10.jpeg', 215, 'fashion'),
-  Product('Fashion Collection 11', 'assets/images/banners/fashion/F W11.jpeg', 225, 'fashion'),
-  Product('Fashion Collection 12', 'assets/images/banners/fashion/F W12.jpeg', 235, 'fashion'),
-  Product('Fashion Collection 13', 'assets/images/banners/fashion/F W13.jpeg', 245, 'fashion'),
-  Product('Fashion Collection 14', 'assets/images/banners/fashion/F W14.jpeg', 255, 'fashion'),
-  Product('Fashion Collection 15', 'assets/images/banners/fashion/F W15.jpeg', 265, 'fashion'),
-  Product('Fashion Collection 16', 'assets/images/banners/fashion/F W16.jpeg', 275, 'fashion'),
-  Product('Fashion Collection 17', 'assets/images/banners/fashion/F W17.jpeg', 285, 'fashion'),
-  Product('Fashion Collection 18', 'assets/images/banners/fashion/F W18.jpeg', 295, 'fashion'),
-  Product('Fashion Collection 19', 'assets/images/banners/fashion/F W19.jpeg', 305, 'fashion'),
-  Product('Fashion Collection 20', 'assets/images/banners/fashion/F W20.jpeg', 315, 'fashion'),
-  Product('Fashion Collection 21', 'assets/images/banners/fashion/F W21.jpeg', 325, 'fashion'),
-  Product('Fashion Collection 22', 'assets/images/banners/fashion/F W22.jpeg', 335, 'fashion'),
-];
+// Default (fallback) lists - asal list loadCatalogFromAssets() se bhi ban jati hai
+const String _bannerBase = 'assets/images/banners';
 
-List<Product> jewelleryProducts = [
-  Product('Jewellery Collection 01', 'assets/images/banners/jewellery/J W1.jpeg', 150, 'jewellery'),
-  Product('Jewellery Collection 02', 'assets/images/banners/jewellery/J W2.jpeg', 165, 'jewellery'),
-  Product('Jewellery Collection 03', 'assets/images/banners/jewellery/J W3.jpeg', 180, 'jewellery'),
-  Product('Jewellery Collection 04', 'assets/images/banners/jewellery/J W4.jpeg', 195, 'jewellery'),
-  Product('Jewellery Collection 05', 'assets/images/banners/jewellery/J W5.jpeg', 210, 'jewellery'),
-  Product('Jewellery Collection 06', 'assets/images/banners/jewellery/J W6.jpeg', 225, 'jewellery'),
-  Product('Jewellery Collection 07', 'assets/images/banners/jewellery/J W7.jpeg', 240, 'jewellery'),
-  Product('Jewellery Collection 08', 'assets/images/banners/jewellery/J W8.jpeg', 255, 'jewellery'),
-  Product('Jewellery Collection 09', 'assets/images/banners/jewellery/J W9.jpeg', 270, 'jewellery'),
-  Product('Jewellery Collection 10', 'assets/images/banners/jewellery/J W10.jpeg', 285, 'jewellery'),
-  Product('Jewellery Collection 11', 'assets/images/banners/jewellery/J W11.jpeg', 300, 'jewellery'),
-  Product('Jewellery Collection 12', 'assets/images/banners/jewellery/J W12.jpeg', 315, 'jewellery'),
-  Product('Jewellery Collection 13', 'assets/images/banners/jewellery/J W13.jpeg', 330, 'jewellery'),
-  Product('Jewellery Collection 14', 'assets/images/banners/jewellery/J W14.jpeg', 345, 'jewellery'),
-  Product('Jewellery Collection 15', 'assets/images/banners/jewellery/J W15.jpeg', 360, 'jewellery'),
-  Product('Jewellery Collection 16', 'assets/images/banners/jewellery/J W16.jpeg', 375, 'jewellery'),
-  Product('Jewellery Collection 17', 'assets/images/banners/jewellery/J W17.jpeg', 390, 'jewellery'),
-  Product('Jewellery Collection 18', 'assets/images/banners/jewellery/J W18.jpeg', 405, 'jewellery'),
-  Product('Jewellery Collection 19', 'assets/images/banners/jewellery/J W19.jpeg', 420, 'jewellery'),
-  Product('Jewellery Collection 20', 'assets/images/banners/jewellery/J W20.jpeg', 435, 'jewellery'),
-];
+List<Product> fashionProducts = List.generate(
+  22,
+  (i) => Product(
+    'Fashion Collection ${_two(i + 1)}',
+    '$_bannerBase/fashion/F W${i + 1}.jpeg',
+    i == 0 ? 120 : (i == 1 ? 135 : 145 + (i - 2) * 10),
+    'fashion',
+  ),
+);
+
+List<Product> jewelleryProducts = List.generate(
+  20,
+  (i) => Product(
+    'Jewellery Collection ${_two(i + 1)}',
+    '$_bannerBase/jewellery/J W${i + 1}.jpeg',
+    150 + i * 15,
+    'jewellery',
+  ),
+);
+
+List<Product> _bagGroup(String title, String folder, String filePrefix,
+    int count, int startNo, int basePrice, int step) {
+  return List.generate(
+    count,
+    (i) => Product(
+      '$title ${_two(i + 1)}',
+      '$_bannerBase/bags/$folder/$filePrefix B W${startNo + i}.jpeg',
+      basePrice + i * step,
+      'bags',
+      title,
+    ),
+  );
+}
 
 List<Product> bagsProducts = [
-  Product('Automobiles & Motorcycle 01', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W1.jpeg', 120, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 02', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W2.jpeg', 135, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 03', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W3.jpeg', 150, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 04', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W4.jpeg', 165, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 05', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W5.jpeg', 180, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 06', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W6.jpeg', 195, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 07', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W7.jpeg', 210, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 08', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W8.jpeg', 225, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 09', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W9.jpeg', 240, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 10', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W10.jpeg', 255, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 11', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W11.jpeg', 270, 'bags', 'Automobiles & Motorcycle'),
-  Product('Automobiles & Motorcycle 12', 'assets/images/banners/bags/Automobiles & Motorcycle/Automobiles & Motorcycle B W12.jpeg', 285, 'bags', 'Automobiles & Motorcycle'),
-  Product('Sports & Outdoor 01', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W13.jpeg', 140, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 02', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W14.jpeg', 155, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 03', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W15.jpeg', 170, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 04', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W16.jpeg', 185, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 05', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W17.jpeg', 200, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 06', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W18.jpeg', 215, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 07', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W19.jpeg', 230, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 08', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W20.jpeg', 245, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 09', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W21.jpeg', 260, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 10', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W22.jpeg', 275, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 11', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W23.jpeg', 290, 'bags', 'Sports & Outdoor'),
-  Product('Sports & Outdoor 12', 'assets/images/banners/bags/Sports & outdoor/Sports & outdoor B W24.jpeg', 305, 'bags', 'Sports & Outdoor'),
-  Product('Kids & Toy 01', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W25.jpeg', 100, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 02', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W26.jpeg', 110, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 03', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W27.jpeg', 120, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 04', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W28.jpeg', 130, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 05', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W29.jpeg', 140, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 06', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W30.jpeg', 150, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 07', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W31.jpeg', 160, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 08', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W32.jpeg', 170, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 09', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W33.jpeg', 180, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 10', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W34.jpeg', 190, 'bags', 'Kids & Toy'),
-  Product('Kids & Toy 11', 'assets/images/banners/bags/Kids & toy/Kids & Toy B W35.jpeg', 200, 'bags', 'Kids & Toy'),
-  Product('Computer & Accessories 01', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W36.jpeg', 130, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 02', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W37.jpeg', 145, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 03', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W38.jpeg', 160, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 04', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W39.jpeg', 175, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 05', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W40.jpeg', 190, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 06', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W41.jpeg', 205, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 07', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W42.jpeg', 220, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 08', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W43.jpeg', 235, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 09', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W44.jpeg', 250, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 10', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W45.jpeg', 265, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 11', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W46.jpeg', 280, 'bags', 'Computer & Accessories'),
-  Product('Computer & Accessories 12', 'assets/images/banners/bags/Computer & Accessories/Computer & Accessories B W47.jpeg', 295, 'bags', 'Computer & Accessories'),
+  ..._bagGroup('Automobiles & Motorcycle', 'Automobiles & Motorcycle',
+      'Automobiles & Motorcycle', 12, 1, 120, 15),
+  ..._bagGroup(
+      'Sports & Outdoor', 'Sports & outdoor', 'Sports & outdoor', 12, 13, 140, 15),
+  ..._bagGroup('Kids & Toy', 'Kids & toy', 'Kids & Toy', 11, 25, 100, 10),
+  ..._bagGroup('Computer & Accessories', 'Computer & Accessories',
+      'Computer & Accessories', 12, 36, 130, 15),
 ];
 
 List<Product> indiaProducts = [
-  Product('India Collection 01', 'assets/images/banners/banner5.jpeg', 180, 'india'),
+  Product('India Collection 01', 'assets/images/banners/banner5.jpeg', 180,
+      'india'),
 ];
 
 List<Product> ukProducts = [
@@ -472,7 +421,8 @@ Future<void> loadCatalogFromAssets() async {
           .where((a) => a.toLowerCase().contains('bags'))
           .take(10)
           .toList();
-      debugPrint('MEER catalog -> bags images NOT found. Assets with "bags": $sample');
+      debugPrint(
+          'MEER catalog -> bags images NOT found. Assets with "bags": $sample');
     }
 
     rebuildCatalog();
@@ -638,7 +588,7 @@ class AuthState extends ChangeNotifier {
 final AuthState authState = AuthState();
 
 // ============================================================================
-// API SERVICE (aap ke backend ke wahi routes jo api_server.dart mein thay)
+// API SERVICE (real backend ke liye - abhi app FakeApiService use kar rahi hai)
 // ============================================================================
 class ApiService {
   static const String baseUrl = kBaseUrl;
@@ -1618,8 +1568,8 @@ class MeerFooter extends StatelessWidget {
     );
   }
 
-  Widget _linkColumn(BuildContext context, String title,
-      List<List<String>> links) {
+  Widget _linkColumn(
+      BuildContext context, String title, List<List<String>> links) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1791,8 +1741,8 @@ class MeerFooter extends StatelessWidget {
                     'On orders over \$100'),
                 _feature(Icons.verified_user_outlined, 'SECURE PAYMENT',
                     'Safe & protected'),
-                _feature(Icons.autorenew, 'EASY RETURNS',
-                    'Hassle-free process'),
+                _feature(
+                    Icons.autorenew, 'EASY RETURNS', 'Hassle-free process'),
                 _feature(Icons.support_agent, 'CUSTOMER CARE',
                     'Always here to help'),
               ],
@@ -1856,9 +1806,9 @@ class MeerFooter extends StatelessWidget {
                     letterSpacing: 1,
                   ),
                 ),
-                Row(
+                const Row(
                   mainAxisSize: MainAxisSize.min,
-                  children: const [
+                  children: [
                     Icon(Icons.credit_card, color: Colors.white38, size: 22),
                     SizedBox(width: 12),
                     Icon(Icons.account_balance_wallet_outlined,
@@ -3416,7 +3366,7 @@ class CartPage extends StatelessWidget {
 }
 
 // ============================================================================
-// CHECKOUT PAGE
+// CHECKOUT PAGE  (FIXED: country code + name field + bracket errors)
 // ============================================================================
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -3429,9 +3379,48 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
+   String _selectedCountryCode = '+92';
+
+  final List<Map<String, String>> _countryCodes = [
+    {'name': 'Pakistan', 'flag': '🇵🇰', 'code': '+92'},
+    {'name': 'United Kingdom', 'flag': '🇬🇧', 'code': '+44'},
+    {'name': 'United States', 'flag': '🇺🇸', 'code': '+1'},
+    {'name': 'Canada', 'flag': '🇨🇦', 'code': '+1'},
+    {'name': 'United Arab Emirates', 'flag': '🇦🇪', 'code': '+971'},
+    {'name': 'Saudi Arabia', 'flag': '🇸🇦', 'code': '+966'},
+    {'name': 'Qatar', 'flag': '🇶🇦', 'code': '+974'},
+    {'name': 'Australia', 'flag': '🇦🇺', 'code': '+61'},
+    {'name': 'Germany', 'flag': '🇩🇪', 'code': '+49'},
+    {'name': 'France', 'flag': '🇫🇷', 'code': '+33'},
+    {'name': 'India', 'flag': '🇮🇳', 'code': '+91'},
+    {'name': 'Turkey', 'flag': '🇹🇷', 'code': '+90'},
+    {'name': 'China', 'flag': '🇨🇳', 'code': '+86'},
+    {'name': 'Bangladesh', 'flag': '🇧🇩', 'code': '+880'},
+    {'name': 'Afghanistan', 'flag': '🇦🇫', 'code': '+93'},
+    {'name': 'South Africa', 'flag': '🇿🇦', 'code': '+27'},
+    {'name': 'Malaysia', 'flag': '🇲🇾', 'code': '+60'},
+    {'name': 'Singapore', 'flag': '🇸🇬', 'code': '+65'},
+    {'name': 'Japan', 'flag': '🇯🇵', 'code': '+81'},
+    {'name': 'Italy', 'flag': '🇮🇹', 'code': '+39'},
+    {'name': 'Spain', 'flag': '🇪🇸', 'code': '+34'},
+    {'name': 'Netherlands', 'flag': '🇳🇱', 'code': '+31'},
+    {'name': 'New Zealand', 'flag': '🇳🇿', 'code': '+64'},
+    {'name': 'Ireland', 'flag': '🇮🇪', 'code': '+353'},
+    {'name': 'Oman', 'flag': '🇴🇲', 'code': '+968'},
+    {'name': 'Kuwait', 'flag': '🇰🇼', 'code': '+965'},
+    {'name': 'Bahrain', 'flag': '🇧🇭', 'code': '+973'},
+    {'name': 'Turkey', 'flag': '🇹🇷', 'code': '+90'},
+    {'name': 'Nigeria', 'flag': '🇳🇬', 'code': '+234'},
+    {'name': 'Kenya', 'flag': '🇰🇪', 'code': '+254'},
+  ];
   final _email = TextEditingController();
   final _address = TextEditingController();
   final _city = TextEditingController();
+
+ 
+  
+
+  bool _submitting = false;
 
   @override
   void dispose() {
@@ -3447,8 +3436,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     if (v == null || v.trim().isEmpty) return 'This field is required';
     return null;
   }
-
-  bool _submitting = false;
 
   Future<void> _placeOrder() async {
     if (_submitting) return;
@@ -3476,7 +3463,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       result = await FakeApiService.createOrder(
         customerName: _name.text.trim(),
         customerEmail: _email.text.trim(),
-        customerPhone: _phone.text.trim(),
+        customerPhone: '$_selectedCountryCode ${_phone.text.trim()}',
         customerAddress: _address.text.trim(),
         customerCity: _city.text.trim(),
         products: products,
@@ -3576,20 +3563,71 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 color: kDark,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 14),
+
+            // ---- FULL NAME ----
             TextFormField(
               controller: _name,
               decoration: fieldDeco('Full name'),
               validator: _required,
             ),
             const SizedBox(height: 14),
-            TextFormField(
-              controller: _phone,
-              keyboardType: TextInputType.phone,
-              decoration: fieldDeco('Phone number'),
-              validator: _required,
+
+            // ---- PHONE (country code + number) ----
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  width: 115,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: kLine),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _selectedCountryCode,
+                      isExpanded: true,
+                      items: _countryCodes.map((country) {
+                        return DropdownMenuItem<String>(
+                          value: country['code'],
+                          child: Text(
+                            '${country['flag']} ${country['code']}',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        if (value != null) {
+                          setState(() => _selectedCountryCode = value);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: TextFormField(
+                    controller: _phone,
+                    keyboardType: TextInputType.phone,
+                    decoration: fieldDeco('Phone number'),
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Required';
+                      }
+                      final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+                      if (digits.length < 6 || digits.length > 15) {
+                        return 'Enter a valid phone number';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 14),
+
             TextFormField(
               controller: _email,
               keyboardType: TextInputType.emailAddress,
@@ -3618,8 +3656,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.all(14),
               color: Colors.white,
-              child: Row(
-                children: const [
+              child: const Row(
+                children: [
                   Icon(Icons.payments_outlined, color: kBronze),
                   SizedBox(width: 12),
                   Expanded(
@@ -4090,9 +4128,8 @@ class _InfoPageState extends State<InfoPage> {
           TextFormField(
             controller: _email,
             decoration: fieldDeco('Your email'),
-            validator: (v) => (v == null || !v.contains('@'))
-                ? 'Enter a valid email'
-                : null,
+            validator: (v) =>
+                (v == null || !v.contains('@')) ? 'Enter a valid email' : null,
           ),
           const SizedBox(height: 14),
           TextFormField(
@@ -4256,7 +4293,6 @@ class _InfoPageState extends State<InfoPage> {
   }
 }
 
-
 // ============================================================================
 // LOGIN / REGISTRATION PAGE
 // ============================================================================
@@ -4312,8 +4348,8 @@ class _AuthPageState extends State<AuthPage> {
           _confirm.clear();
         });
       } else {
-       final data = await FakeApiService.loginCustomer( 
-                  email: email,
+        final data = await FakeApiService.loginCustomer(
+          email: email,
           password: _password.text,
         ).timeout(const Duration(seconds: 20));
 
