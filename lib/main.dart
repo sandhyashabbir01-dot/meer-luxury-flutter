@@ -1,10 +1,11 @@
-import 'fake_api_service.dart';
 import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+
+import 'fake_api_service.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -118,7 +119,7 @@ class Product {
 // Default (fallback) lists - asal list loadCatalogFromAssets() se bhi ban jati hai
 const String _bannerBase = 'assets/images/banners';
 
-List<Product> fashionProducts = List.generate(
+List<Product> fashionProducts = List<Product>.generate(
   22,
   (i) => Product(
     'Fashion Collection ${_two(i + 1)}',
@@ -128,7 +129,7 @@ List<Product> fashionProducts = List.generate(
   ),
 );
 
-List<Product> jewelleryProducts = List.generate(
+List<Product> jewelleryProducts = List<Product>.generate(
   20,
   (i) => Product(
     'Jewellery Collection ${_two(i + 1)}',
@@ -140,7 +141,7 @@ List<Product> jewelleryProducts = List.generate(
 
 List<Product> _bagGroup(String title, String folder, String filePrefix,
     int count, int startNo, int basePrice, int step) {
-  return List.generate(
+  return List<Product>.generate(
     count,
     (i) => Product(
       '$title ${_two(i + 1)}',
@@ -155,8 +156,8 @@ List<Product> _bagGroup(String title, String folder, String filePrefix,
 List<Product> bagsProducts = [
   ..._bagGroup('Automobiles & Motorcycle', 'Automobiles & Motorcycle',
       'Automobiles & Motorcycle', 12, 1, 120, 15),
-  ..._bagGroup(
-      'Sports & Outdoor', 'Sports & outdoor', 'Sports & outdoor', 12, 13, 140, 15),
+  ..._bagGroup('Sports & Outdoor', 'Sports & outdoor', 'Sports & outdoor', 12,
+      13, 140, 15),
   ..._bagGroup('Kids & Toy', 'Kids & toy', 'Kids & Toy', 11, 25, 100, 10),
   ..._bagGroup('Computer & Accessories', 'Computer & Accessories',
       'Computer & Accessories', 12, 36, 130, 15),
@@ -1390,7 +1391,6 @@ class MeerTopBar extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
                   color: kGold,
-                  shape: BoxShape.rectangle,
                   borderRadius: BorderRadius.all(Radius.circular(9)),
                 ),
                 child: Text(
@@ -2744,6 +2744,12 @@ class _CategoryPageState extends State<CategoryPage> {
       }
     }
 
+    const sortOptions = [
+      'Featured',
+      'Price: Low to High',
+      'Price: High to Low',
+    ];
+
     return PageShell(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2788,11 +2794,7 @@ class _CategoryPageState extends State<CategoryPage> {
                         underline: const SizedBox(),
                         iconEnabledColor: kDark,
                         style: const TextStyle(color: kDark, fontSize: 13),
-                        items: const [
-                          'Featured',
-                          'Price: Low to High',
-                          'Price: High to Low',
-                        ]
+                        items: sortOptions
                             .map((s) => DropdownMenuItem<String>(
                                   value: s,
                                   child: Text(s),
@@ -3366,7 +3368,7 @@ class CartPage extends StatelessWidget {
 }
 
 // ============================================================================
-// CHECKOUT PAGE  (FIXED: country code + name field + bracket errors)
+// CHECKOUT PAGE
 // ============================================================================
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -3379,9 +3381,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final _formKey = GlobalKey<FormState>();
   final _name = TextEditingController();
   final _phone = TextEditingController();
-   String _selectedCountryCode = '+92';
+  final _email = TextEditingController();
+  final _address = TextEditingController();
+  final _city = TextEditingController();
 
-  final List<Map<String, String>> _countryCodes = [
+  // Country ka naam unique hai (US/Canada dono ka code +1 hai),
+  // isliye dropdown ki value naam rakhi hai, code nahi.
+  String _selectedCountry = 'Pakistan';
+
+  static const List<Map<String, String>> _countryCodes = [
     {'name': 'Pakistan', 'flag': '🇵🇰', 'code': '+92'},
     {'name': 'United Kingdom', 'flag': '🇬🇧', 'code': '+44'},
     {'name': 'United States', 'flag': '🇺🇸', 'code': '+1'},
@@ -3409,16 +3417,16 @@ class _CheckoutPageState extends State<CheckoutPage> {
     {'name': 'Oman', 'flag': '🇴🇲', 'code': '+968'},
     {'name': 'Kuwait', 'flag': '🇰🇼', 'code': '+965'},
     {'name': 'Bahrain', 'flag': '🇧🇭', 'code': '+973'},
-    {'name': 'Turkey', 'flag': '🇹🇷', 'code': '+90'},
     {'name': 'Nigeria', 'flag': '🇳🇬', 'code': '+234'},
     {'name': 'Kenya', 'flag': '🇰🇪', 'code': '+254'},
   ];
-  final _email = TextEditingController();
-  final _address = TextEditingController();
-  final _city = TextEditingController();
 
- 
-  
+  String get _selectedCountryCode {
+    for (final c in _countryCodes) {
+      if (c['name'] == _selectedCountry) return c['code'] ?? '+92';
+    }
+    return '+92';
+  }
 
   bool _submitting = false;
 
@@ -3458,7 +3466,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             })
         .toList();
 
-    Map<String, dynamic> result;
+    dynamic result;
     try {
       result = await FakeApiService.createOrder(
         customerName: _name.text.trim(),
@@ -3480,17 +3488,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
     setState(() => _submitting = false);
 
     String orderNo = '';
-    final dynamic d = result;
-    if (d is Map) {
-      final src = (d['order'] is Map) ? d['order'] as Map : d;
-      final v = src['orderNumber'] ?? src['orderId'] ?? src['_id'] ?? src['id'];
+    if (result is Map) {
+      final dynamic src = (result['order'] is Map) ? result['order'] : result;
+      final dynamic v =
+          src['orderNumber'] ?? src['orderId'] ?? src['_id'] ?? src['id'];
       if (v != null) orderNo = v.toString();
     }
 
     final customerName = _name.text.trim();
     final pageContext = context;
 
-    showDialog(
+    showDialog<void>(
       context: context,
       barrierDismissible: false,
       builder: (ctx) {
@@ -3578,7 +3586,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 115,
+                  width: 125,
                   height: 56,
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -3587,11 +3595,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
-                      value: _selectedCountryCode,
+                      value: _selectedCountry,
                       isExpanded: true,
                       items: _countryCodes.map((country) {
                         return DropdownMenuItem<String>(
-                          value: country['code'],
+                          value: country['name'],
                           child: Text(
                             '${country['flag']} ${country['code']}',
                             style: const TextStyle(fontSize: 14),
@@ -3600,7 +3608,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       }).toList(),
                       onChanged: (value) {
                         if (value != null) {
-                          setState(() => _selectedCountryCode = value);
+                          setState(() => _selectedCountry = value);
                         }
                       },
                     ),
@@ -3611,15 +3619,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.phone,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                      LengthLimitingTextInputFormatter(15),
+                    ],
                     decoration: fieldDeco('Phone number'),
                     validator: (value) {
                       if (value == null || value.trim().isEmpty) {
                         return 'Required';
                       }
+
                       final digits = value.replaceAll(RegExp(r'[^0-9]'), '');
+
                       if (digits.length < 6 || digits.length > 15) {
                         return 'Enter a valid phone number';
                       }
+
                       return null;
                     },
                   ),
@@ -3628,6 +3643,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             ),
             const SizedBox(height: 14),
 
+            // ---- EMAIL ----
             TextFormField(
               controller: _email,
               keyboardType: TextInputType.emailAddress,
@@ -3640,6 +3656,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
               },
             ),
             const SizedBox(height: 14),
+
+            // ---- ADDRESS ----
             TextFormField(
               controller: _address,
               maxLines: 2,
@@ -3647,12 +3665,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
               validator: _required,
             ),
             const SizedBox(height: 14),
+
+            // ---- CITY ----
             TextFormField(
               controller: _city,
               decoration: fieldDeco('City'),
               validator: _required,
             ),
             const SizedBox(height: 22),
+
             Container(
               padding: const EdgeInsets.all(14),
               color: Colors.white,
@@ -3801,8 +3822,11 @@ class WishlistPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 50),
                           child: Column(
                             children: [
-                              const Icon(Icons.favorite_border,
-                                  size: 64, color: kBronze),
+                              const Icon(
+                                Icons.favorite_border,
+                                size: 64,
+                                color: kBronze,
+                              ),
                               const SizedBox(height: 18),
                               const Text(
                                 'YOUR WISHLIST IS EMPTY',
@@ -3862,12 +3886,12 @@ class _SearchPageState extends State<SearchPage> {
     final mobile = isMobile(context);
     final q = _c.text.trim().toLowerCase();
 
-    final results = q.isEmpty
+    final List<Product> results = q.isEmpty
         ? <Product>[]
         : allProducts
             .where((p) =>
                 p.name.toLowerCase().contains(q) ||
-                p.category.contains(q) ||
+                p.category.toLowerCase().contains(q) ||
                 p.group.toLowerCase().contains(q))
             .toList();
 
@@ -4170,7 +4194,7 @@ class _InfoPageState extends State<InfoPage> {
   }
 
   Widget _blogSection(bool mobile) {
-    final posts = [
+    final List<List<String>> posts = [
       [
         'Styling Timeless Pieces',
         'Simple ways to mix classic fashion with modern details.',
