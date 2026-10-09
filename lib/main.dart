@@ -3619,6 +3619,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: TextFormField(
                     controller: _phone,
                     keyboardType: TextInputType.phone,
+
+                    // *** NEW: Place Order dabaye baghair, type karte hi
+                    // validation chalegi (error foran nazar aayega) ***
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                    // sirf digits, aur maximum 15
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
                       LengthLimitingTextInputFormatter(15),
